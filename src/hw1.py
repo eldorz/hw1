@@ -68,8 +68,8 @@ def onelayer(X, Y, layersize=10):
         batch_loss: The average cross-entropy loss of the batch
     """
     x_size = 784
-    w = tf.Variable(tf.zeros([x_size, layersize]))
-    b = tf.Variable(tf.zeros([layersize]))
+    w = tf.Variable(tf.zeros([x_size, layersize]), name = "weights")
+    b = tf.Variable(tf.zeros([layersize]), name = "biases")
     logits = tf.matmul(X, w) + b
     batch_xentropy = tf.losses.softmax_cross_entropy(
         onehot_labels = Y,
@@ -96,6 +96,21 @@ def twolayer(X, Y, hiddensize=30, outputsize=10):
         batch_xentropy: The cross-entropy loss for each image in the batch
         batch_loss: The average cross-entropy loss of the batch
     """
+    x_size = 784
+    w1 = tf.Variable(tf.random_normal([x_size, hiddensize], stddev=0.35), 
+        name = "layer_1_weights")
+    b1 = tf.Variable(tf.zeros([hiddensize]), name = "layer_1_biases")
+    w2 = tf.Variable(tf.random_normal([hiddensize, outputsize], stddev=0.35), 
+        name = "layer_2_weights")
+    b2 = tf.Variable(tf.zeros([outputsize]), name = "layer_2_biases")
+    layer1_activation = tf.matmul(X, w1) + b1
+    layer1_output = tf.nn.relu(layer1_activation)
+    logits = tf.matmul(layer1_output, w2) + b2
+    batch_xentropy = tf.losses.softmax_cross_entropy(
+        onehot_labels = Y,
+        logits = logits)
+    batch_loss = tf.reduce_mean(batch_xentropy)
+    preds = tf.nn.softmax(logits)
     return w1, b1, w2, b2, logits, preds, batch_xentropy, batch_loss
 
 def convnet(X, Y, convlayer_sizes=[10, 10], \
