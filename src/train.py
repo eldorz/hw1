@@ -5,8 +5,8 @@ from datetime import datetime
 from tensorflow.examples.tutorials.mnist import input_data
 
 #options: "onelayer", "twolayer", "conv"
-network = "none"
-#network = "onelayer"
+#network = "none"
+network = "onelayer"
 #network = "twolayer"
 #network = "conv"
 
