@@ -67,7 +67,7 @@ def onelayer(X, Y, layersize=10):
         batch_xentropy: The cross-entropy loss for each image in the batch
         batch_loss: The average cross-entropy loss of the batch
     """
-    x_size = X.get_shape()[1]
+    x_size = X.get_shape()[1].value
     w = tf.Variable(tf.zeros([x_size, layersize]), name = "weights", 
         dtype = tf.float32)
     b = tf.Variable(tf.zeros([layersize]), name = "biases", dtype = tf.float32)
@@ -97,7 +97,8 @@ def twolayer(X, Y, hiddensize=30, outputsize=10):
         batch_xentropy: The cross-entropy loss for each image in the batch
         batch_loss: The average cross-entropy loss of the batch
     """
-    x_size = X.get_shape()[1]
+    x_size = X.get_shape()[1].value
+    print("x_size: ", x_size)
     w1 = tf.Variable(tf.random_normal([x_size, hiddensize], stddev=0.35), 
         name = "layer_1_weights")
     b1 = tf.Variable(tf.zeros([hiddensize]), name = "layer_1_biases")
@@ -140,6 +141,8 @@ def convnet(X, Y, convlayer_sizes=[10, 10], \
     will be from the conv2 layer. If you reshape the conv2 output using tf.reshape,
     you should be able to call onelayer() to get the final layer of your network
     """
+    image_x = X.get_shape()[1].value
+    image_y = X.get_shape()[2].value
     conv1 = tf.layers.conv2d(
         inputs = X,
         filters = convlayer_sizes[0],
@@ -153,7 +156,7 @@ def convnet(X, Y, convlayer_sizes=[10, 10], \
         padding = "same",
         activation = tf.nn.relu)
     conv2_vector = tf.reshape(conv2, 
-        [-1, image_side * image_side * convlayer_sizes[1]])
+        [-1, image_x * image_y * convlayer_sizes[1]])
     w, b, logits, preds, batch_xentropy, batch_loss = onelayer(conv2_vector, Y, 
         outputsize)
 
