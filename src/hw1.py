@@ -67,10 +67,16 @@ def onelayer(X, Y, layersize=10):
         batch_xentropy: The cross-entropy loss for each image in the batch
         batch_loss: The average cross-entropy loss of the batch
     """
-    x_size = 784
-    w = tf.Variable(tf.zeros([x_size, layersize]), name = "weights")
-    b = tf.Variable(tf.zeros([layersize]), name = "biases")
+    x_size = X.get_shape()[1]
+    print("x_size: ", x_size)
+    w = tf.Variable(tf.zeros([x_size, layersize]), name = "weights", 
+        dtype = tf.float32)
+    print("w: ", w.get_shape())
+    b = tf.Variable(tf.zeros([layersize]), name = "biases", dtype = tf.float32)
+    print("b: ", b.get_shape())
     logits = tf.matmul(X, w) + b
+    print("Y in onelayer: ", Y.get_shape())
+    print("logits: ", logits.get_shape())
     batch_xentropy = tf.losses.softmax_cross_entropy(
         onehot_labels = Y,
         logits = logits)
@@ -140,20 +146,28 @@ def convnet(X, Y, convlayer_sizes=[10, 10], \
     you should be able to call onelayer() to get the final layer of your network
     """
     image_side = 28
+    print("X: ", X.get_shape())
     images = tf.reshape(X, [-1, image_side, image_side, 1])
+    print("images: ", images.get_shape())
     conv1 = tf.layers.conv2d(
         inputs = images,
         filters = convlayer_sizes[0],
         kernel_size = filter_shape,
         padding = "same",
         activation = tf.nn.relu)
+    print("conv1: ", conv1.get_shape())
     conv2 = tf.layers.conv2d(
         inputs = conv1,
         filters = convlayer_sizes[1],
         kernel_size = filter_shape,
         padding = "same",
         activation = tf.nn.relu)
-    conv2_vector = tf.reshape(conv2, [-1, image_side * image_side])
+    print("conv2: ", conv2.get_shape())
+    conv2_vector = tf.reshape(conv2, 
+        [-1, image_side * image_side * convlayer_sizes[1]])
+    print("conv2_vector: ", conv2_vector.get_shape())
+    print("Y: ", Y.get_shape())
+    print("outputsize: ", outputsize)
     w, b, logits, preds, batch_xentropy, batch_loss = onelayer(conv2_vector, Y, 
         outputsize)
 
