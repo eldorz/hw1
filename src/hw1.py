@@ -98,7 +98,6 @@ def twolayer(X, Y, hiddensize=30, outputsize=10):
         batch_loss: The average cross-entropy loss of the batch
     """
     x_size = X.get_shape()[1].value
-    print("x_size: ", x_size)
     w1 = tf.Variable(tf.random_normal([x_size, hiddensize], stddev=0.35), 
         name = "layer_1_weights")
     b1 = tf.Variable(tf.zeros([hiddensize]), name = "layer_1_biases")
