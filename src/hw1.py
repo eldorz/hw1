@@ -147,13 +147,15 @@ def convnet(X, Y, convlayer_sizes=[10, 10], \
         filters = convlayer_sizes[0],
         kernel_size = filter_shape,
         padding = "same",
-        activation = tf.nn.relu)
+        activation = tf.nn.relu,
+        name = "conv1")
     conv2 = tf.layers.conv2d(
         inputs = conv1,
         filters = convlayer_sizes[1],
         kernel_size = filter_shape,
         padding = "same",
-        activation = tf.nn.relu)
+        activation = tf.nn.relu,
+        name = "conv2")
     conv2_vector = tf.reshape(conv2, 
         [-1, image_x * image_y * convlayer_sizes[1]])
     w, b, logits, preds, batch_xentropy, batch_loss = onelayer(conv2_vector, Y, 
