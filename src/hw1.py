@@ -99,11 +99,13 @@ def twolayer(X, Y, hiddensize=30, outputsize=10):
     """
     x_size = X.get_shape()[1].value
     w1 = tf.Variable(tf.random_normal([x_size, hiddensize], stddev=0.35), 
-        name = "layer_1_weights")
-    b1 = tf.Variable(tf.zeros([hiddensize]), name = "layer_1_biases")
+        name = "layer_1_weights", dtype = tf.float32)
+    b1 = tf.Variable(tf.zeros([hiddensize]), 
+        name = "layer_1_biases", dtype = tf.float32)
     w2 = tf.Variable(tf.random_normal([hiddensize, outputsize], stddev=0.35), 
-        name = "layer_2_weights")
-    b2 = tf.Variable(tf.zeros([outputsize]), name = "layer_2_biases")
+        name = "layer_2_weights", dtype = tf.float32)
+    b2 = tf.Variable(tf.zeros([outputsize]), 
+        name = "layer_2_biases", dtype = tf.float32)
     layer1_activation = tf.matmul(X, w1) + b1
     layer1_output = tf.nn.relu(layer1_activation)
     logits = tf.matmul(layer1_output, w2) + b2
