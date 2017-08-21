@@ -73,6 +73,7 @@ def onelayer(X, Y, layersize=10):
     # he initialisation, var(W) = 2 / n(in)
     var = 2 / x_size
     std_dev = math.sqrt(var) 
+
     w = tf.Variable(tf.random_normal([x_size, layersize], stddev = std_dev),
         name = "weights", 
         dtype = tf.float32)
@@ -104,11 +105,20 @@ def twolayer(X, Y, hiddensize=30, outputsize=10):
         batch_loss: The average cross-entropy loss of the batch
     """
     x_size = X.get_shape()[1].value
-    w1 = tf.Variable(tf.random_normal([x_size, hiddensize], stddev=0.35), 
+
+    # he initialisation, var(W) = 2 / n(in)
+    var1 = 2 / x_size
+    std_dev1 = math.sqrt(var1)
+    var2 = 2 / hiddensize
+    std_dev2 = math.sqrt(var2) 
+
+    w1 = tf.Variable(
+        tf.random_normal([x_size, hiddensize], stddev = std_dev1), 
         name = "layer_1_weights", dtype = tf.float32)
     b1 = tf.Variable(tf.zeros([hiddensize]), 
         name = "layer_1_biases", dtype = tf.float32)
-    w2 = tf.Variable(tf.random_normal([hiddensize, outputsize], stddev=0.35), 
+    w2 = tf.Variable(
+        tf.random_normal([hiddensize, outputsize], stddev = std_dev2), 
         name = "layer_2_weights", dtype = tf.float32)
     b2 = tf.Variable(tf.zeros([outputsize]), 
         name = "layer_2_biases", dtype = tf.float32)
