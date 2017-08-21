@@ -18,6 +18,7 @@ you create.
 """
 
 import tensorflow as tf
+import math
 
 def input_placeholder():
     """
@@ -68,7 +69,12 @@ def onelayer(X, Y, layersize=10):
         batch_loss: The average cross-entropy loss of the batch
     """
     x_size = X.get_shape()[1].value
-    w = tf.Variable(tf.zeros([x_size, layersize]), name = "weights", 
+    
+    # he initialisation, var(W) = 2 / n(in)
+    var = 2 / x_size
+    std_dev = math.sqrt(var) 
+    w = tf.Variable(tf.random_normal([x_size, layersize], stddev = std_dev),
+        name = "weights", 
         dtype = tf.float32)
     b = tf.Variable(tf.zeros([layersize]), name = "biases", dtype = tf.float32)
     logits = tf.matmul(X, w) + b
